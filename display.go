@@ -19,7 +19,7 @@ func preciseIfPolytech(cours CoursItem) CoursItem {
 func displayCours(cours CoursItem) {
 	cours = preciseIfPolytech(cours)
 	if cours.StartAt.Before(time.Now()) && cours.EndAt.After(time.Now()) {
-		color.New(color.FgCyan, color.Bold).Println(cours.Categories, ">", cours.StartAt.Local().Hour(), ":", cours.StartAt.Local().Minute(), " {", cours.RoomsForBlocks, "}")
+		color.New(color.FgCyan, color.Bold).Println(cours.StartAt.Local().Format("15:04") + " > " + cours.Categories + cours.RoomsForBlocks)
 	} else {
 		fmt.Println(cours.StartAt.Local().Format("15:04") + " > " + cours.Categories + cours.RoomsForBlocks)
 	}
