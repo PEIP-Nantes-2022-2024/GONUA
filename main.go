@@ -43,7 +43,7 @@ func main() {
 		text = "Classes for the " + color.CyanString(start_date.Format("Mon 02 Jan 2006"))
 	case "Full week":
 		start_date = time.Now().AddDate(0, 0, int(-time.Now().Weekday()+1))
-		end_date = start_date.AddDate(0, 0, 5)
+		end_date = start_date.AddDate(0, 0, 4)
 		text = "Classes for the week from " + color.CyanString(start_date.Format("Mon 02 Jan 2006")) + " to " + color.CyanString(end_date.Format("Mon 02 Jan 2006"))
 	case "Exit":
 		color.New(color.FgRed).Println("Bye bye")
@@ -57,25 +57,25 @@ func main() {
 	cours := request(start_date.Format("2006-01-02"), end_date.Format("2006-01-02"), classe_171)
 
 	s.Stop()
-
-	if len(cours) == 0 {
-		fmt.Println("No classes found")
-		return
-	}
 	if result != "Full week" {
-		reader := 0
 		current := time.Date(start_date.Year(), start_date.Month(), start_date.Day(), 8, 0, 0, 0, time.Local)
-		for reader < len(cours) {
-			if current.Local().Hour() == cours[reader].StartAt.Local().Hour() {
-				displayCours(cours[reader])
-				current = current.Add(time.Duration(cours[reader].EndAt.Sub(cours[reader].StartAt)) + 10*time.Minute)
-				reader++
-			} else {
-				if current.Local().Minute() == 0 {
-					displayHours(current)
+		displayDay(current, cours)
+	} else {
+		for start_date.Before(end_date) {
+			day_classes := Cours{}
+			for _, c := range cours {
+				if c.StartAt.Weekday() == start_date.Weekday() {
+					day_classes = append(day_classes, c)
 				}
-				current = current.Add(time.Hour / 2)
 			}
+			if start_date.YearDay() == time.Now().YearDay() && start_date.Year() == time.Now().Year() {
+				fmt.Println("====== " + color.HiCyanString(start_date.Format("Mon 02 Jan 2006")) + " ======")
+			} else {
+				fmt.Println("====== " + color.BlueString(start_date.Format("Mon 02 Jan 2006")) + " ======")
+			}
+			displayDay(start_date, day_classes)
+			fmt.Println("")
+			start_date = time.Date(start_date.Year(), start_date.Month(), start_date.Day()+1, 8, 0, 0, 0, time.Local)
 		}
 	}
 }
