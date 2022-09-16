@@ -76,11 +76,7 @@ func main() {
 				reader++
 			} else {
 				if current.Local().Minute() == 0 {
-					if current.Local().Hour() == time.Now().Hour() {
-						color.New(color.FgCyan, color.Bold).Println(current.Local().Format("15:04") + " > " + "Free")
-					} else {
-						fmt.Println(current.Local().Format("15:04") + " > " + "Free")
-					}
+					displayHours(current)
 				}
 				current = current.Add(time.Hour / 2)
 			}
