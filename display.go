@@ -41,6 +41,14 @@ func displayDay(current time.Time, cours Cours) {
 	reader := 0
 	for reader < len(cours) {
 		if current.Local().Hour() == cours[reader].StartAt.Local().Hour() {
+			if reader+1 < len(cours) {
+				if cours[reader+1].StartAt.Local().Hour() == current.Local().Hour() {
+					print(color.RedString("- "))
+					displayCours(cours[reader])
+					reader++
+					print(color.RedString("- "))
+				}
+			}
 			displayCours(cours[reader])
 			current = current.Add(time.Duration(cours[reader].EndAt.Sub(cours[reader].StartAt)) + 10*time.Minute)
 			reader++
