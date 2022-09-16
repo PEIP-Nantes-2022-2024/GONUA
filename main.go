@@ -68,7 +68,7 @@ func main() {
 		current := time.Date(start_date.Year(), start_date.Month(), start_date.Day(), 8, 0, 0, 0, time.Local)
 		for reader < len(cours) {
 			if current.Local().Hour() == cours[reader].StartAt.Local().Hour() {
-				display(cours[reader])
+				displayCours(cours[reader])
 				current = current.Add(time.Duration(cours[reader].EndAt.Sub(cours[reader].StartAt)) + 10*time.Minute)
 				reader++
 			} else {
