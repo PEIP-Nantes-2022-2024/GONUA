@@ -38,7 +38,7 @@ func main() {
 		end_date = start_date
 		text = "Classes for the " + color.CyanString(start_date.Format("Mon 02 Jan 2006"))
 	case "See today classes":
-		start_date = time.Now().AddDate(0, 0, -1)
+		start_date = time.Now()
 		end_date = start_date
 		text = "Classes for the " + color.CyanString(start_date.Format("Mon 02 Jan 2006"))
 	case "Full week":
