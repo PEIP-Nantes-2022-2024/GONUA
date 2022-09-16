@@ -50,4 +50,13 @@ func main() {
 		color.New(color.FgRed).Println("Bye bye")
 		return
 	}
+
+	fmt.Println(text)
+	fmt.Println("")
+	s := spinner.New(spinner.CharSets[39], 250*time.Millisecond)
+	s.Start()
+	cours := request(start_date.Format("2006-01-02"), end_date.Format("2006-01-02"), classe_171)
+
+	s.Stop()
+
 }
