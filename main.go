@@ -1,24 +1,52 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/c-bata/go-prompt"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
 )
 
-const classe_171 = "72431"
+func loadJson() map[string]string {
+	classesFile, err := os.Open("classes.json")
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	defer classesFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(classesFile)
+
+	var classes map[string]string
+	json.Unmarshal([]byte(byteValue), &classes)
+	return classes
+}
+
+func completer(d prompt.Document) []prompt.Suggest {
+	classes := loadJson()
+
+	k := []prompt.Suggest{}
+
+	for t, d := range classes {
+		k = append(k, prompt.Suggest{Text: t, Description: d})
+	}
+	return prompt.FilterHasPrefix(k, d.GetWordBeforeCursor(), true)
+}
 
 func main() {
 	fmt.Println("Hello, welcome to the calendar CLI")
-	prompt := promptui.Select{
+	promptUI := promptui.Select{
 		Label: "Select Action",
 		Items: []string{"See today classes", "See next day classes", "Full week", "Exit"},
 	}
 
-	_, result, err := prompt.Run()
+	_, result, err := promptUI.Run()
 
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
@@ -50,11 +78,41 @@ func main() {
 		return
 	}
 
+	promptUI = promptui.Select{
+		Label: "Select a class",
+		Items: []string{
+			"Default class (mine so 171PEIP)",
+			"I want another class",
+			"Exit (yes you can cancel now too, I'm so generous with cancel state)",
+		},
+	}
+
+	_, result, err = promptUI.Run()
+
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return
+	}
+
+	var classe string
+	switch result {
+	case "Default class (mine so 171PEIP)":
+		classe = "171PEIP"
+	case "I want another class":
+		fmt.Println("Enter group name (ex: 171PEIP)")
+		classe = prompt.Input("> ", completer)
+	case "Exit (yes you can cancel now too, I'm so generous with cancel state)":
+		color.New(color.FgRed).Println("Bye bye")
+		return
+	}
+
+	classes := loadJson()
+
 	fmt.Println(text)
 	fmt.Println("")
 	s := spinner.New(spinner.CharSets[39], 250*time.Millisecond)
 	s.Start()
-	cours := request(start_date.Format("2006-01-02"), end_date.Format("2006-01-02"), classe_171)
+	cours := request(start_date.Format("2006-01-02"), end_date.Format("2006-01-02"), classes[classe])
 
 	s.Stop()
 	if result != "Full week" {
