@@ -32,20 +32,19 @@ func main() {
 	switch result {
 	case "See next day classes":
 		start_date = time.Now().AddDate(0, 0, 1)
-		end_date = time.Now().AddDate(0, 0, 1)
 		for start_date.Weekday() > time.Friday || start_date.Weekday() < time.Monday {
 			start_date = start_date.AddDate(0, 0, 1)
-			end_date = end_date.AddDate(0, 0, 1)
 		}
-		text = "Classes for the " + color.CyanString(start_date.Format("02 01 2006"))
+		end_date = start_date
+		text = "Classes for the " + color.CyanString(start_date.Format("Mon 02 Jan 2006"))
 	case "See today classes":
-		start_date = time.Now()
-		end_date = time.Now()
-		text = "Classes for the " + color.CyanString(start_date.Format("02 01 2006"))
+		start_date = time.Now().AddDate(0, 0, -1)
+		end_date = start_date
+		text = "Classes for the " + color.CyanString(start_date.Format("Mon 02 Jan 2006"))
 	case "Full week":
-		start_date = time.Now()
-		end_date = time.Now().AddDate(0, 0, 6)
-		text = "Classes for the week of " + color.CyanString(start_date.Format("02 01 2006"))
+		start_date = time.Now().AddDate(0, 0, int(-time.Now().Weekday()+1))
+		end_date = start_date.AddDate(0, 0, 5)
+		text = "Classes for the week from " + color.CyanString(start_date.Format("Mon 02 Jan 2006")) + " to " + color.CyanString(end_date.Format("Mon 02 Jan 2006"))
 	case "Exit":
 		color.New(color.FgRed).Println("Bye bye")
 		return
