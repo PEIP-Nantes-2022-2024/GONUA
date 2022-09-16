@@ -64,9 +64,6 @@ func main() {
 		return
 	}
 	if result != "Full week" {
-		if cours[0].StartAt.After(time.Now()) {
-			color.New(color.FgCyan, color.Bold).Println("Now")
-		}
 		reader := 0
 		current := time.Date(start_date.Year(), start_date.Month(), start_date.Day(), 8, 0, 0, 0, time.Local)
 		for reader < len(cours) {
@@ -80,9 +77,6 @@ func main() {
 				}
 				current = current.Add(time.Hour / 2)
 			}
-		}
-		if cours[len(cours)-1].EndAt.Before(time.Now()) {
-			color.New(color.FgCyan, color.Bold).Println("Now")
 		}
 	}
 }
