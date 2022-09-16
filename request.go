@@ -27,3 +27,11 @@ func request(start string, end string, classe string) Cours {
 
 	return cours
 }
+
+func loadJson() map[string]string {
+	url := "https://raw.githubusercontent.com/fantomitechno/GONUA/main/classes.json"
+
+	classes := map[string]string{}
+	getJson(url, &classes)
+	return classes
+}

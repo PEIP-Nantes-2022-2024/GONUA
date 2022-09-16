@@ -1,10 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -12,21 +9,6 @@ import (
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
 )
-
-func loadJson() map[string]string {
-	classesFile, err := os.Open("classes.json")
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
-	defer classesFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(classesFile)
-
-	var classes map[string]string
-	json.Unmarshal([]byte(byteValue), &classes)
-	return classes
-}
 
 func completer(d prompt.Document) []prompt.Suggest {
 	classes := loadJson()
