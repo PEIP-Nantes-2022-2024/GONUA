@@ -1,0 +1,28 @@
+# Automatically build the project and run any configured tests for every push
+# and submitted pull request. This can help catch issues that only occur on
+# certain platforms or Java versions, and provides a first line of defence
+# against bad commits.
+
+name: build
+on: [pull_request, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: Setup GO
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.19'
+      - name: make gradle wrapper executable
+        run: chmod +x ./build.sh
+      - name: Build
+        run: ./build.sh
+      - name: capture build artifacts
+        if: ${{ runner.os == 'Linux' }} # Only upload artifacts built from latest java on one OS
+        uses: actions/upload-artifact@v2
+        with:
+          name: Artifacts
+          path: build/
