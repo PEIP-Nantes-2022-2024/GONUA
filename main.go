@@ -63,28 +63,30 @@ func main() {
 		fmt.Println("No classes found")
 		return
 	}
-	if cours[0].StartAt.After(time.Now()) {
-		color.New(color.FgCyan, color.Bold).Println("Now")
-	}
-	reader := 0
-	current := time.Date(start_date.Year(), start_date.Month(), start_date.Day(), 8, 0, 0, 0, time.Local)
-	for reader < len(cours) {
-		if current.Local().Hour() == cours[reader].StartAt.Local().Hour() {
-			display(cours[reader])
-			current = current.Add(time.Duration(cours[reader].EndAt.Sub(cours[reader].StartAt)) + 10*time.Minute)
-			reader++
-		} else {
-			if current.Local().Minute() == 0 {
-				if current.Local().Hour() == time.Now().Hour() {
-					color.New(color.FgCyan, color.Bold).Println(current.Local().Format("15:04") + " > " + "Free")
-				} else {
-					fmt.Println(current.Local().Format("15:04") + " > " + "Free")
-				}
-			}
-			current = current.Add(time.Hour / 2)
+	if result != "Full week" {
+		if cours[0].StartAt.After(time.Now()) {
+			color.New(color.FgCyan, color.Bold).Println("Now")
 		}
-	}
-	if cours[len(cours)-1].EndAt.Before(time.Now()) {
-		color.New(color.FgCyan, color.Bold).Println("Now")
+		reader := 0
+		current := time.Date(start_date.Year(), start_date.Month(), start_date.Day(), 8, 0, 0, 0, time.Local)
+		for reader < len(cours) {
+			if current.Local().Hour() == cours[reader].StartAt.Local().Hour() {
+				display(cours[reader])
+				current = current.Add(time.Duration(cours[reader].EndAt.Sub(cours[reader].StartAt)) + 10*time.Minute)
+				reader++
+			} else {
+				if current.Local().Minute() == 0 {
+					if current.Local().Hour() == time.Now().Hour() {
+						color.New(color.FgCyan, color.Bold).Println(current.Local().Format("15:04") + " > " + "Free")
+					} else {
+						fmt.Println(current.Local().Format("15:04") + " > " + "Free")
+					}
+				}
+				current = current.Add(time.Hour / 2)
+			}
+		}
+		if cours[len(cours)-1].EndAt.Before(time.Now()) {
+			color.New(color.FgCyan, color.Bold).Println("Now")
+		}
 	}
 }
