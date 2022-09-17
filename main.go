@@ -69,7 +69,7 @@ func main() {
 		},
 	}
 
-	_, result, err = promptUI.Run()
+	_, resultc, err := promptUI.Run()
 
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
@@ -77,7 +77,7 @@ func main() {
 	}
 
 	var classe string
-	switch result {
+	switch resultc {
 	case "Default class (mine so 171PEIP)":
 		classe = "171PEIP"
 	case "I want another class":
@@ -95,8 +95,8 @@ func main() {
 	s := spinner.New(spinner.CharSets[39], 250*time.Millisecond)
 	s.Start()
 	cours := request(start_date.Format("2006-01-02"), end_date.Format("2006-01-02"), classes[classe])
-
 	s.Stop()
+
 	if result != "Full week" {
 		current := time.Date(start_date.Year(), start_date.Month(), start_date.Day(), 8, 0, 0, 0, time.Local)
 		displayDay(current, cours)
