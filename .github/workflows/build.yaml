@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: '1.19'
-      - name: make gradle wrapper executable
+      - name: make build script executable
         run: chmod +x ./build.sh
       - name: Build
         run: ./build.sh
